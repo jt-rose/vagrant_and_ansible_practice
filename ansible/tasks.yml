@@ -1,0 +1,29 @@
+- name: install nodejs and npm
+  apt:
+    name:
+      - nodejs
+      - npm
+    update_cache: yes
+
+- name: create app directory
+  file:
+    path: /web/app
+    state: directory
+
+- name: copy app files
+  copy:
+    src: "/Users/jeffreyrose/Desktop/devops/vagrant_ansible_practice/app/{{ item }}"
+    dest: "/web/app/{{ item }}"
+  loop:
+    - app.js
+    - package.json
+    - package-lock.json
+
+- name: run npm install
+  npm:
+    path: "/web/app/"
+
+- name: boot up server
+  command: npm run start
+  args:
+    chdir: "/web/app"
